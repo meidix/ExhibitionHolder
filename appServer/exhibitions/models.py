@@ -8,7 +8,7 @@ class Exhibition(models.Model):
     start_date = jmodels.jDateField()
     end_date = jmodels.jDateField()
     address = models.TextField(help_text="exihibition address")
-    form_header = models.TextField(default="با تشکر از حضور جنابعالی در غرفه شرکت فنی مهندسی فناور پویا سپاهان. خواهشمند است نسبت به تکمیل فرم و اعلام درخواست اقدام فرمایید")
+    form_header = models.TextField(default="با تشکر از حضور جنابعالی در غرفه شرکت فنی مهندسی فناور پویا سپاهان. خواهشمند است نسبت به تکمیل فرم و اعلام درخواست اقدام فرمایید", blank=True)
 
 
     def __str__(self):
