@@ -1,10 +1,37 @@
+import random
+import string
 import jdatetime
 from django.test import TransactionTestCase
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-import exhibitions
 from .models import Exhibition
+
+
+def random_timedelta():
+    number = random.randint(1, 999999)
+    return jdatetime.timedelta(days=number)
+
+
+def random_j_date():
+    index = jdatetime.date(year=1377, month=9, day=13)
+    timedelta = random_timedelta()
+    return index + timedelta
+
+
+def random_bool():
+    number = random.randint(1, 10)
+    return True if number % 2 == 0 else False
+
+
+def random_exhibition():
+    return Exhibition.objects.create(
+        title=''.join(random.choices(string.ascii_letters, k=20)),
+        start_date= random_j_date(),
+        end_date=random_j_date(),
+        address=''.join(random.choices(string.ascii_letters, k=50)),
+        active=random_bool()
+    )
 
 class ExhibitionDatesTestCase(TransactionTestCase):
     def setUp(self):
@@ -73,3 +100,22 @@ class VistorAPIsTestCase(APITestCase):
         self.assertIn('cellphone_number', response.data)
         self.assertIn('coop_request', response.data)
         self.assertIn('product_request', response.data)
+
+class ExhibitionAPITestCase(APITestCase):
+
+    def setUp(self):
+        for _ in range(10):
+            random_exhibition()
+
+    def test_get_list_of_active_exhibitions(self, *args, **kwargs):
+        response = self.client.get("/exhibition/")
+        self.assertTrue(response.status_code, status.HTTP_200_OK)
+
+        exhibitions = Exhibition.objects.all()
+        active_exhibitions = [item.pk for item in exhibitions.filter(active=True)]
+        for item in response.data:
+            self.assertIn(item['id'], active_exhibitions)
+
+        deactive_exhibitions = [item.pk for item in exhibitions.filter(active=False)]
+        for item in response.data:
+            self.assertNotIn(item['id'], deactive_exhibitions)
