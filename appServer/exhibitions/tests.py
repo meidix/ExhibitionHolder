@@ -119,3 +119,10 @@ class ExhibitionAPITestCase(APITestCase):
         deactive_exhibitions = [item.pk for item in exhibitions.filter(active=False)]
         for item in response.data:
             self.assertNotIn(item['id'], deactive_exhibitions)
+
+    def test_if_exhibition_activates_with_a_put_request(self, *args, **kwargs):
+        deactive_exhibitions = Exhibition.objects.filter(active=False)
+        for item in deactive_exhibitions:
+            response = self.client.put(f'/exhibition/{item.pk}/activate/')
+            self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+            self.assertTrue(Exhibition.objects.filter(pk=item.pk, active=True).exists())

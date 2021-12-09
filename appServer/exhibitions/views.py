@@ -22,6 +22,17 @@ class ExhibitionViewSet(ModelViewSet):
     def list_all(self, request, *args, **kwargs):
         return super().list(self, request, *args, **kwargs)
 
+    @action(methods=['PUT'], detail=True, url_path="activate")
+    def activate(self, request, pk, *args, **kwargs):
+        try:
+            instance = self.queryset.get(pk=pk)
+        except Exhibition.DoesNotExist:
+            return Response({ 'error': "the requested exhibition does not exist"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        instance.active = True
+        instance.save()
+        serializer = self.serializer_class(instance)
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
 
 class VisitorViewSet(ModelViewSet):
