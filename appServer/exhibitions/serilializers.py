@@ -10,7 +10,6 @@ class ExhibitionSerializer(ModelSerializer):
 
     class Meta:
         model = Exhibition
-        exclude = ['form_header']
 
 
 class VisitorSerailizer(ModelSerializer):
