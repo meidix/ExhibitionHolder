@@ -8,16 +8,25 @@ function App() {
   const initialState = {
     loading: true,
     listItems: null,
+    current: null,
   }
+
   const [state, dispatch] = useReducer((state, action) => {
+    const setActiveExhibition = data => {
+      if (data.length === 1) {
+        return data[0].id
+      } else {
+        return null
+      }
+    }
     switch (action.type) {
       case "setListItems":
+        console.log(action.payload)
         return {
           ...state,
           loading: false,
-          listItems: {
-            ...action.payload,
-          },
+          listItems: [...action.payload],
+          current: setActiveExhibition(action.payload),
         }
       default:
         return state
@@ -28,15 +37,20 @@ function App() {
     axios
       .get("http://localhost:8000/exhibition/")
       .then(response => {
-        dispatch({ type: "setListItems", payload: { ...response.data } })
+        dispatch({ type: "setListItems", payload: [...response.data] })
       })
       .catch(err => {
         console.log(err)
       })
   }, [])
+
+  const form = null
+
   return (
     <div className="App">
-      {state.loading ? null : (
+      {state.loading ? null : state.current ? (
+        form
+      ) : (
         <List>
           {state.listItems.map((item, index) => {
             return <ListItem content={item.title} key={index} />
