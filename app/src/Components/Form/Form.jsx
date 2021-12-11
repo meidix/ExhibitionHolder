@@ -1,12 +1,63 @@
+import { useReducer, useEffect } from "react"
 import { withFormik } from "formik"
 import axios from "axios"
 import * as Yup from "yup"
 import Input from "../Input/Input/Input"
 import Button from "../Button/Button"
+import { MultiSelect } from "react-multi-select-component"
 
 import "./Form.css"
 
 const Form = props => {
+  const [state, dispatch] = useReducer(
+    (state, action) => {
+      switch (action.type) {
+        case "setCoops":
+          return {
+            ...state,
+            coops: [...action.payload],
+            loading: false,
+          }
+        case "setProducts":
+          return {
+            ...state,
+            products: [...action.payload],
+            loading: false,
+          }
+        default:
+          return {
+            ...state,
+          }
+      }
+    },
+    {
+      loading: true,
+      coops: null,
+      products: null,
+    }
+  )
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/options/coops/")
+      .then(response => {
+        dispatch({ type: "setCoops", payload: [...response.data] })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [])
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/options/products/")
+      .then(response => {
+        dispatch({ type: "setProducts", payload: [...response.data] })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [])
   return (
     <form className="Form" onSubmit={props.handleSubmit}>
       <div className="FormGroup">
@@ -121,6 +172,18 @@ const Form = props => {
           changed={props.handleChange}
           validationError={props.touched.email ? props.errors.email : null}
           blured={props.handleBlur}
+        />
+      </div>
+      <div className="FormGroup">
+        <MultiSelect
+          options={[...state.coops]}
+          hasSelectAll
+          isLoading={state.loading}
+        />
+        <MultiSelect
+          options={[...state.products]}
+          hasSelectAll
+          isLoading={state.loading}
         />
       </div>
       <div className="FormSubmit">
