@@ -28,30 +28,15 @@ class Visitor(models.Model):
     work_position = models.CharField(max_length=50, blank=True, default="Blank")
     email = models.EmailField(null=True, blank=True)
 
-    class CoopRequest(models.TextChoices):
-        BUY_PRODUCTS = 'buy products'
-        SALES_BRANCH = 'sales branch'
-        AFTER_SALE_BRANCH = 'after sales branch'
-        GET_CATALAOUGUE = ' get catalougue'
-        PRESENTATION = 'presentation'
-        NOTSET = 'not mentioned'
-
-    coop_request = models.CharField(max_length=60, choices=CoopRequest.choices, blank=True, default=CoopRequest.NOTSET)
-
-    class Products(models.TextChoices):
-        VACUUM_THERAPY = 'vaccumed vac'
-        HYPER = 'vacumed vac Hyper'
-        HYPERMID = 'vacumed vac Hypermid'
-        CANISTER = 'canister'
-        DRESSING_KIT = 'dressing kit'
-        MICRODERM = 'microderm abrasion'
-        MICROPIGMENTATION = 'micro pigmentation'
-        MICRONEEDLING = 'miconeedling'
-        PROBE = 'microderm probes'
-        LIFTING_PROBE = 'microderm lifting probes'
-        P1_CARTRIDGES = 'Micropigmentation cartridges'
-        P2_CARTRIDGES = 'Microneddling cartridges'
-        NOTSET = 'not mentioned'
-
-    product_request = models.CharField(max_length=70, choices=Products.choices, blank=True, default=Products.NOTSET)
     slaes_opinion = models.TextField(blank=True, default="None")
+
+
+class CoopRequest(models.Model):
+    visitor = models.ManyToManyField(Visitor, related_name="coop_request", null=True)
+    label = models.CharField(max_length=40)
+    value = models.CharField(max_length=40)
+
+class Products(models.Model):
+    visitor = models.ManyToManyField(Visitor, related_name="products_request", null=True)
+    label = models.CharField(max_length=40)
+    value = models.CharField(max_length=40)

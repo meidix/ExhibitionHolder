@@ -10,6 +10,7 @@ class ExhibitionSerializer(ModelSerializer):
 
     class Meta:
         model = Exhibition
+        exclude = []
 
 
 class VisitorSerailizer(ModelSerializer):
