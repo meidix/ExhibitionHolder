@@ -32,11 +32,11 @@ class Visitor(models.Model):
 
 
 class CoopRequest(models.Model):
-    visitor = models.ManyToManyField(Visitor, related_name="coop_request", null=True)
+    visitor = models.ManyToManyField(Visitor, related_name="coop_request")
     label = models.CharField(max_length=40)
     value = models.CharField(max_length=40)
 
 class Products(models.Model):
-    visitor = models.ManyToManyField(Visitor, related_name="products_request", null=True)
+    visitor = models.ManyToManyField(Visitor, related_name="products_request")
     label = models.CharField(max_length=40)
     value = models.CharField(max_length=40)

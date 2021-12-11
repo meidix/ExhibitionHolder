@@ -12,5 +12,7 @@ visitor_create = views.VisitorViewSet.as_view({
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('visitor/<pk>/', visitor_create)
+    path('visitor/<pk>/', visitor_create),
+    path('options/coops/', views.CoopRequestListAPIView.as_view()),
+    path("options/products/", views.ProductListAPIView.as_view())
 ]

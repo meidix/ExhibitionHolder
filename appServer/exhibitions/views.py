@@ -1,10 +1,11 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
 
-from exhibitions.models import Exhibition, Visitor
-from exhibitions.serilializers import ExhibitionSerializer, VisitorSerailizer
+from exhibitions.models import CoopRequest, Exhibition, Products, Visitor
+from exhibitions.serilializers import CoopRequestSerializer, ExhibitionSerializer, ProductsSerializer, VisitorSerailizer
 
 
 class ExhibitionViewSet(ModelViewSet):
@@ -54,3 +55,12 @@ class VisitorViewSet(ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+class CoopRequestListAPIView(generics.ListAPIView):
+    queryset = CoopRequest.objects.all()
+    serializer_class = CoopRequestSerializer
+
+
+class ProductListAPIView(generics.ListAPIView):
+    queryset = Products.objects.all()
+    serializer_class = ProductsSerializer
