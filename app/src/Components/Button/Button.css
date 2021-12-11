@@ -1,0 +1,10 @@
+.Btn {
+  padding: 18px 34px 21px 36px;
+  background-color: #244ba0;
+  cursor: pointer;
+  color: white;
+  outline: none;
+  box-shadow: none;
+  border-radius: 15px;
+  border: none;
+}

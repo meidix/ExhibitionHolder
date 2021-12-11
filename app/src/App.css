@@ -4,7 +4,9 @@ body {
 }
 
 .App {
-  text-align: center;
+  direction: rtl;
+  width: 100vw;
+  height: 100vh;
 }
 
 .App-logo {

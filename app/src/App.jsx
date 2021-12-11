@@ -1,6 +1,8 @@
 import "./App.css"
 import axios from "axios"
 import { useReducer, useEffect } from "react"
+import Modal from "./Components/Modal/Modal"
+import Form from "./Components/Form/Form"
 import List from "./Components/List/List"
 import ListItem from "./Components/List/ListItem/ListItem"
 
@@ -14,7 +16,7 @@ function App() {
   const [state, dispatch] = useReducer((state, action) => {
     const setActiveExhibition = data => {
       if (data.length === 1) {
-        return data[0].id
+        return data[0]
       } else {
         return null
       }
@@ -37,6 +39,7 @@ function App() {
     axios
       .get("http://localhost:8000/exhibition/")
       .then(response => {
+        alert("I got here")
         dispatch({ type: "setListItems", payload: [...response.data] })
       })
       .catch(err => {
@@ -44,12 +47,12 @@ function App() {
       })
   }, [])
 
-  const form = null
-
   return (
     <div className="App">
       {state.loading ? null : state.current ? (
-        form
+        <Modal header={state.current.form_header} width={500}>
+          <Form exhibition={{ ...state.current }} />
+        </Modal>
       ) : (
         <List>
           {state.listItems.map((item, index) => {
