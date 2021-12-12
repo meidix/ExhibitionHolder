@@ -211,7 +211,7 @@ const Form = props => {
               options={state.coops}
               className="MultiSelect"
               name="coop_request"
-              value={state.values.coop_request}
+              value={props.values.coop_request}
               onChange={e => handleMultiSelectChange(e, "CoopRequest")}
             />
           </div>
@@ -223,7 +223,7 @@ const Form = props => {
               options={state.products}
               className="MultiSelect"
               name="product_request"
-              value={state.values.product_request}
+              value={props.values.product_request}
               onChange={e => handleMultiSelectChange(e, "ProductRequest")}
             />
           </div>
@@ -231,9 +231,8 @@ const Form = props => {
       )}
       <div className="FormSubmit">
         <Button type="submit">
-          <span className="SubmitButtonLabel">ساخت حساب کاربری</span>
+          <span className="SubmitButtonLabel">ارسال فرم</span>
         </Button>
-        <div className="Link">قبلا حساب کاربری داشته اید؟</div>
       </div>
     </form>
   )
@@ -259,12 +258,12 @@ export default withFormik({
     cellphone_number: Yup.string()
       .min(10)
       .max(11)
-      .matches(/^(\+98|0)?9[0-9]{8}$/)
+      .matches(/^(\+98|0)?9[0-9]{9}$/)
       .required(),
     phone_number: Yup.string()
       .min(11)
       .max(11)
-      .matches(/^0[1-9]{2}[1-9]{8}$/),
+      .matches(/^0[1-9]{2}[0-9]{8}$/),
     email: Yup.string().email(),
   }),
   handleSubmit: (values, formikBag) => {

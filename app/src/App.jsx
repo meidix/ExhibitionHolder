@@ -39,7 +39,6 @@ function App() {
     axios
       .get("http://localhost:8000/exhibition/")
       .then(response => {
-        alert("I got here")
         dispatch({ type: "setListItems", payload: [...response.data] })
       })
       .catch(err => {
