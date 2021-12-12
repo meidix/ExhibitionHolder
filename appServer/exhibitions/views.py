@@ -41,6 +41,14 @@ class VisitorViewSet(ModelViewSet):
     serializer_class = VisitorSerailizer
     lookup_field = 'pk'
 
+    def add_m2m_fields(self, instance, *args):
+        coops = args[0]
+        products = args[1]
+        for coop in coops:
+            instance.coop_request.add(coop['id'])
+        for product in products:
+            instance.products_request.add(product['id'])
+
     def create(self, request, pk, *args, **kwargs):
         try:
             exhibition = Exhibition.objects.get(pk=pk)
@@ -48,10 +56,13 @@ class VisitorViewSet(ModelViewSet):
             return Response({}, status=status.HTTP_404_NOT_FOUND)
 
         data = request.data.copy()
+        coops = data.pop('coop_request', None)
+        products = data.pop('product_request', None)
         data['exhibition'] = exhibition.pk
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
             serializer.save()
+            self.add_m2m_fields(serializer.instance, coops, products)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
