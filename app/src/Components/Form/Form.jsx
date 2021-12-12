@@ -16,13 +16,34 @@ const Form = props => {
           return {
             ...state,
             coops: [...action.payload],
-            loading: false,
           }
         case "setProducts":
           return {
             ...state,
             products: [...action.payload],
+          }
+        case "loaded":
+          return {
+            ...state,
             loading: false,
+          }
+        case "setCoopRequest":
+          props.values.coop_request = [...action.payload]
+          return {
+            ...state,
+            values: {
+              ...state.values,
+              coop_request: [...action.payload],
+            },
+          }
+        case "setProductRequest":
+          props.values.product_request = [...action.payload]
+          return {
+            ...state,
+            values: {
+              ...state.values,
+              product_request: [...action.payload],
+            },
           }
         default:
           return {
@@ -34,6 +55,10 @@ const Form = props => {
       loading: true,
       coops: null,
       products: null,
+      values: {
+        coop_request: [],
+        product_request: [],
+      },
     }
   )
 
@@ -58,6 +83,17 @@ const Form = props => {
         console.log(err)
       })
   }, [])
+
+  useEffect(() => {
+    if (state.coops && state.products) {
+      dispatch({ type: "loaded" })
+    }
+  }, [state.coops, state.products])
+
+  const handleMultiSelectChange = (e, name) => {
+    dispatch({ type: `set${name}`, payload: [...e] })
+  }
+
   return (
     <form className="Form" onSubmit={props.handleSubmit}>
       <div className="FormGroup">
@@ -66,6 +102,7 @@ const Form = props => {
           type="text"
           name="first_name"
           value={props.values.first_name}
+          placeholder="نام"
           changed={props.handleChange}
           validationError={
             props.touched.first_name ? props.errors.first_name : null
@@ -75,6 +112,7 @@ const Form = props => {
         <Input
           label="نام خانوادگی"
           type="text"
+          placeholder="نام خانوادگی"
           name="last_name"
           value={props.values.last_name}
           changed={props.handleChange}
@@ -163,29 +201,34 @@ const Form = props => {
           blured={props.handleBlur}
         />
       </div>
-      <div className="FormGroup">
-        <Input
-          label="درخواست همکاری"
-          type="email"
-          name="email"
-          value={props.values.email}
-          changed={props.handleChange}
-          validationError={props.touched.email ? props.errors.email : null}
-          blured={props.handleBlur}
-        />
-      </div>
-      <div className="FormGroup">
-        <MultiSelect
-          options={[...state.coops]}
-          hasSelectAll
-          isLoading={state.loading}
-        />
-        <MultiSelect
-          options={[...state.products]}
-          hasSelectAll
-          isLoading={state.loading}
-        />
-      </div>
+      {state.loading ? null : (
+        <div className="FormGroup">
+          <div className="MultiSelect">
+            <label htmlFor="coop_request" className="Label">
+              درخواست همکاری
+            </label>
+            <MultiSelect
+              options={state.coops}
+              className="MultiSelect"
+              name="coop_request"
+              value={state.values.coop_request}
+              onChange={e => handleMultiSelectChange(e, "CoopRequest")}
+            />
+          </div>
+          <div className="MultiSelect">
+            <label htmlFor="product_request" className="Label">
+              محصولات مورد نیاز
+            </label>
+            <MultiSelect
+              options={state.products}
+              className="MultiSelect"
+              name="product_request"
+              value={state.values.product_request}
+              onChange={e => handleMultiSelectChange(e, "ProductRequest")}
+            />
+          </div>
+        </div>
+      )}
       <div className="FormSubmit">
         <Button type="submit">
           <span className="SubmitButtonLabel">ساخت حساب کاربری</span>
@@ -207,8 +250,8 @@ export default withFormik({
     workplace: "",
     work_position: "",
     email: "",
-    coop_request: "",
-    product_request: "",
+    coop_request: [],
+    product_request: [],
   }),
   validationSchema: Yup.object().shape({
     first_name: Yup.string().max(20).required(),

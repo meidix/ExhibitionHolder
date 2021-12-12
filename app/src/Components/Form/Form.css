@@ -35,3 +35,14 @@
   font-size: 20px;
   font-weight: 500;
 }
+
+.Form .FormGroup .MultiSelect {
+  width: 100%;
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.Form .FormGroup .Label {
+  display: block;
+  width: 100%;
+}
