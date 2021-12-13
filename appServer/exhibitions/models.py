@@ -21,7 +21,7 @@ class Visitor(models.Model):
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=30)
     cellphone_number = models.CharField(max_length=11, validators=[validate_cell_number])
-    phone_nunmber = models.CharField(max_length=11, default="03100000000", blank=True, validators=[validate_phone_number])
+    phone_number = models.CharField(max_length=11, default="03100000000", blank=True, validators=[validate_phone_number])
     expertise = models.CharField(max_length=50, default="Blank", blank=True)
     state = models.CharField(max_length=30, default="Isfahan", blank=True)
     workplace = models.CharField(max_length=50, blank=True, default="Blank")
@@ -29,6 +29,9 @@ class Visitor(models.Model):
     email = models.EmailField(null=True, blank=True)
 
     slaes_opinion = models.TextField(blank=True, default="None")
+
+    def __str__(self):
+        return f'{self.exhibition} - {self.first_name} {self.last_name} - {self.cellphone_number}'
 
 
 class CoopRequest(models.Model):

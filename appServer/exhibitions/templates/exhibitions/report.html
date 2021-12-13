@@ -1,0 +1,51 @@
+{% autoescape off %}
+
+<div>
+  <p style="direction: rtl; font-size: 16px">
+    غرفه شرکت در {{ visitor.exhibition.title }} بازدید کننده جدیدی داشته که
+    اطلاعات مربوطه در زیر آورده شده
+  </p>
+  <ul style="direction: rtl; font-size: 14px">
+    <li>
+      <strong>نام کامل</strong>
+      {{ visitor.first_name }} {{visitor.last_name }}
+    </li>
+    <li>
+      <strong>شماره تلفن همراه</strong>
+      {{ visitor.cellphone_number }}
+    </li>
+    <li>
+      <strong>تلفن ثابت</strong>
+      {{ visitor.phone_number }}
+    </li>
+    <li>
+      <strong>تخصص</strong>
+      {{ visitor.expertise }}
+    </li>
+    <li>
+      <strong>استان/شهر</strong>
+      {{ visitor.state }}
+    </li>
+    <li>
+      <strong>محل کار</strong>
+      {{ visitor.workplace }}
+    </li>
+    <li>
+      <strong>سمت</strong>
+      {{ visitor.work_position }}
+    </li>
+    <li>
+      <strong>ایمیل</strong>
+      {{ visitor.email }}
+    </li>
+    <li>
+      <strong>درخواست همکاری</strong>
+      {% for coop in coops %} {{ coop.label }}, {% endfor %}
+    </li>
+    <li>
+      <strong>محصولات مورد نیاز</strong>
+      {% for p in products %} {{ p.label }}, {% endfor %}
+    </li>
+  </ul>
+</div>
+{% endautoescape %}

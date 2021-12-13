@@ -37,7 +37,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/exhibition/")
+      .get("http://localhost:8000/tasks/")
       .then(response => {
         dispatch({ type: "setListItems", payload: [...response.data] })
       })
@@ -49,7 +49,7 @@ function App() {
   return (
     <div className="App">
       {state.loading ? null : state.current ? (
-        <Modal header={state.current.form_header} width={500}>
+        <Modal header={state.current.title} width={500}>
           <Form exhibition={{ ...state.current }} />
         </Modal>
       ) : (
