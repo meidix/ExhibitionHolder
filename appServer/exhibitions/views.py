@@ -1,3 +1,7 @@
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from django.utils.html import strip_tags
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import generics
 from rest_framework.response import Response
@@ -48,6 +52,7 @@ class VisitorViewSet(ModelViewSet):
             instance.coop_request.add(coop['id'])
         for product in products:
             instance.products_request.add(product['id'])
+        return instance
 
     def create(self, request, pk, *args, **kwargs):
         try:
@@ -62,7 +67,16 @@ class VisitorViewSet(ModelViewSet):
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
             serializer.save()
-            self.add_m2m_fields(serializer.instance, coops, products)
+            instance = self.add_m2m_fields(serializer.instance, coops, products)
+            context = {
+                "visitor": instance,
+                'coops': instance.coop_request.all(),
+                'products': instance.products_request.all(),
+            }
+            subject = f'بازدید کننده جدید در {instance.exhibition.title}'
+            html_message = render_to_string('exhibitions/report.html', context=context)
+            plain_message = strip_tags(html_message)
+            send_mail(subject, plain_message, settings.EMAIL_HOST_USER, [settings.EMAIL_GUEST_USER], fail_silently=True, html_message=html_message)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
