@@ -1,11 +1,13 @@
 import { useReducer, useEffect } from "react"
-import { withFormik } from "formik"
+import { withFormik, useFormikContext } from "formik"
 import axios from "axios"
 import * as Yup from "yup"
 import Input from "../Input/Input/Input"
 import Button from "../Button/Button"
 import { MultiSelect } from "react-multi-select-component"
+import Loader from "react-loader-spinner"
 
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import "./Form.css"
 
 const Form = props => {
@@ -90,151 +92,162 @@ const Form = props => {
     }
   }, [state.coops, state.products])
 
+  const { isSubmitting } = useFormikContext()
+
   const handleMultiSelectChange = (e, name) => {
     dispatch({ type: `set${name}`, payload: [...e] })
   }
 
   return (
-    <form className="Form" onSubmit={props.handleSubmit}>
-      <div className="FormGroup">
-        <Input
-          label="نام"
-          type="text"
-          name="first_name"
-          value={props.values.first_name}
-          placeholder="نام"
-          changed={props.handleChange}
-          validationError={
-            props.touched.first_name ? props.errors.first_name : null
-          }
-          blured={props.handleBlur}
-        />
-        <Input
-          label="نام خانوادگی"
-          type="text"
-          placeholder="نام خانوادگی"
-          name="last_name"
-          value={props.values.last_name}
-          changed={props.handleChange}
-          validationError={
-            props.touched.last_name ? props.errors.last_name : null
-          }
-          blured={props.handleBlur}
-        />
-        <Input
-          label="شماره همراه"
-          type="text"
-          name="cellphone_number"
-          value={props.values.cellphone_number}
-          changed={props.handleChange}
-          validationError={
-            props.touched.cellphone_number
-              ? props.errors.cellphone_number
-              : null
-          }
-          blured={props.handleBlur}
-        />
-        <Input
-          label="شماره تلفن"
-          type="text"
-          name="phone_number"
-          value={props.values.phone_number}
-          changed={props.handleChange}
-          validationError={
-            props.touched.phone_number ? props.errors.phone_number : null
-          }
-          blured={props.handleBlur}
-        />
+    <div>
+      <div className="FormWelcome">
+        <p>{props.exhibition.form_header}</p>
       </div>
-      <div className="FormGroup">
-        <Input
-          label="شهر/استان"
-          type="text"
-          name="state"
-          value={props.values.state}
-          changed={props.handleChange}
-          validationError={props.touched.state ? props.errors.state : null}
-          blured={props.handleBlur}
-        />
-        <Input
-          label="محل کار"
-          type="text"
-          name="workplace"
-          value={props.values.workplace}
-          changed={props.handleChange}
-          validationError={
-            props.touched.workplace ? props.errors.workplace : null
-          }
-          blured={props.handleBlur}
-        />
-        <Input
-          label="سمت شغلی"
-          type="text"
-          name="work_position"
-          value={props.values.work_position}
-          changed={props.handleChange}
-          validationError={
-            props.touched.work_position ? props.errors.work_position : null
-          }
-          blured={props.handleBlur}
-        />
-        <Input
-          label="تخصص"
-          type="text"
-          name="expertise"
-          value={props.values.expertise}
-          changed={props.handleChange}
-          validationError={
-            props.touched.expertise ? props.errors.expertise : null
-          }
-          blured={props.handleBlur}
-        />
-      </div>
-      <div className="FormGroup">
-        <Input
-          label="پست الکترونیکی"
-          type="email"
-          name="email"
-          value={props.values.email}
-          changed={props.handleChange}
-          validationError={props.touched.email ? props.errors.email : null}
-          blured={props.handleBlur}
-        />
-      </div>
-      {state.loading ? null : (
+      <form className="Form" onSubmit={props.handleSubmit}>
         <div className="FormGroup">
-          <div className="MultiSelect">
-            <label htmlFor="coop_request" className="Label">
-              درخواست همکاری
-            </label>
-            <MultiSelect
-              options={state.coops}
-              className="MultiSelect"
-              name="coop_request"
-              value={props.values.coop_request}
-              onChange={e => handleMultiSelectChange(e, "CoopRequest")}
-            />
-          </div>
-          <div className="MultiSelect">
-            <label htmlFor="product_request" className="Label">
-              محصولات مورد نیاز
-            </label>
-            <MultiSelect
-              options={state.products}
-              className="MultiSelect"
-              name="product_request"
-              value={props.values.product_request}
-              onChange={e => handleMultiSelectChange(e, "ProductRequest")}
-            />
-          </div>
+          <Input
+            label="نام"
+            type="text"
+            name="first_name"
+            value={props.values.first_name}
+            placeholder="نام"
+            changed={props.handleChange}
+            validationError={
+              props.touched.first_name ? props.errors.first_name : null
+            }
+            blured={props.handleBlur}
+          />
+          <Input
+            label="نام خانوادگی"
+            type="text"
+            placeholder="نام خانوادگی"
+            name="last_name"
+            value={props.values.last_name}
+            changed={props.handleChange}
+            validationError={
+              props.touched.last_name ? props.errors.last_name : null
+            }
+            blured={props.handleBlur}
+          />
+          <Input
+            label="شماره همراه"
+            type="text"
+            name="cellphone_number"
+            value={props.values.cellphone_number}
+            changed={props.handleChange}
+            validationError={
+              props.touched.cellphone_number
+                ? props.errors.cellphone_number
+                : null
+            }
+            blured={props.handleBlur}
+          />
+          <Input
+            label="شماره تلفن"
+            type="text"
+            name="phone_number"
+            value={props.values.phone_number}
+            changed={props.handleChange}
+            validationError={
+              props.touched.phone_number ? props.errors.phone_number : null
+            }
+            blured={props.handleBlur}
+          />
         </div>
-      )}
-      <div className="FormSubmit">
-        <Button type="submit">
-          <span className="SubmitButtonLabel">ارسال فرم</span>
-        </Button>
-      </div>
-    </form>
+        <div className="FormGroup">
+          <Input
+            label="شهر/استان"
+            type="text"
+            name="state"
+            value={props.values.state}
+            changed={props.handleChange}
+            validationError={props.touched.state ? props.errors.state : null}
+            blured={props.handleBlur}
+          />
+          <Input
+            label="محل کار"
+            type="text"
+            name="workplace"
+            value={props.values.workplace}
+            changed={props.handleChange}
+            validationError={
+              props.touched.workplace ? props.errors.workplace : null
+            }
+            blured={props.handleBlur}
+          />
+          <Input
+            label="سمت شغلی"
+            type="text"
+            name="work_position"
+            value={props.values.work_position}
+            changed={props.handleChange}
+            validationError={
+              props.touched.work_position ? props.errors.work_position : null
+            }
+            blured={props.handleBlur}
+          />
+          <Input
+            label="تخصص"
+            type="text"
+            name="expertise"
+            value={props.values.expertise}
+            changed={props.handleChange}
+            validationError={
+              props.touched.expertise ? props.errors.expertise : null
+            }
+            blured={props.handleBlur}
+          />
+        </div>
+        <div className="FormGroup">
+          <Input
+            label="پست الکترونیکی"
+            type="email"
+            name="email"
+            value={props.values.email}
+            changed={props.handleChange}
+            validationError={props.touched.email ? props.errors.email : null}
+            blured={props.handleBlur}
+          />
+        </div>
+        {state.loading ? null : (
+          <div className="FormGroup">
+            <div className="MultiSelect">
+              <label htmlFor="coop_request" className="Label">
+                درخواست همکاری
+              </label>
+              <MultiSelect
+                options={state.coops}
+                className="MultiSelect"
+                name="coop_request"
+                value={props.values.coop_request}
+                onChange={e => handleMultiSelectChange(e, "CoopRequest")}
+              />
+            </div>
+            <div className="MultiSelect">
+              <label htmlFor="product_request" className="Label">
+                محصولات مورد نیاز
+              </label>
+              <MultiSelect
+                options={state.products}
+                className="MultiSelect"
+                name="product_request"
+                value={props.values.product_request}
+                onChange={e => handleMultiSelectChange(e, "ProductRequest")}
+              />
+            </div>
+          </div>
+        )}
+        <div className="FormSubmit">
+          <Button type="submit">
+            {isSubmitting ? (
+              <Loader type="ThreeDots" color="#fff" height={30} width={60} />
+            ) : (
+              <span className="SubmitButtonLabel">ارسال فرم</span>
+            )}
+          </Button>
+        </div>
+      </form>
+    </div>
   )
 }
 
