@@ -104,7 +104,7 @@ class ExhibitionAPITestCase(APITestCase):
             random_exhibition()
 
     def test_get_list_of_active_exhibitions(self, *args, **kwargs):
-        response = self.client.get("/exhibition/")
+        response = self.client.get("/namayeshga/")
         self.assertTrue(response.status_code, status.HTTP_200_OK)
 
         exhibitions = Exhibition.objects.all()
@@ -119,6 +119,6 @@ class ExhibitionAPITestCase(APITestCase):
     def test_if_exhibition_activates_with_a_put_request(self, *args, **kwargs):
         deactive_exhibitions = Exhibition.objects.filter(active=False)
         for item in deactive_exhibitions:
-            response = self.client.put(f'/exhibition/{item.pk}/activate/')
+            response = self.client.put(f'/namayeshga/{item.pk}/activate/')
             self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
             self.assertTrue(Exhibition.objects.filter(pk=item.pk, active=True).exists())

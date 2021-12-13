@@ -37,7 +37,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/exhibition/")
+      .get("http://localhost:8000/tasks/")
       .then(response => {
         dispatch({ type: "setListItems", payload: [...response.data] })
       })
