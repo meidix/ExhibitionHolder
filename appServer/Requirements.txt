@@ -12,11 +12,13 @@ Deprecated==1.2.13
 Django==3.2.9
 django-admin==2.0.1
 django-cors-headers==3.10.0
+django-environ==0.8.1
 django-excel-base==1.0.4
 django-excel-response2==3.0.2
 django-jalali==4.3.0
 django-six==1.0.4
 djangorestframework==3.12.4
+gunicorn==20.1.0
 idna==3.3
 ippanel==1.1.0
 jdatetime==3.6.4
