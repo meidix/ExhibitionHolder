@@ -21,7 +21,7 @@ const Input = props => {
         onChange={props.changed}
         onBlur={props.blured}
         className={classes.join(" ")}
-        placeholder={props.placeholder | " "}
+        placeholder={props.placeholder}
       />
       {props.validationError ? (
         <span className="Error">{props.validationError}</span>
