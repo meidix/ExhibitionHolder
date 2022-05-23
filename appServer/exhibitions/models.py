@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.signals import ModelSignal
 from django_jalali.db import models as jmodels
 
 from .validators import validate_cell_number, validate_phone_number
@@ -43,3 +44,5 @@ class Products(models.Model):
     visitor = models.ManyToManyField(Visitor, related_name="products_request")
     label = models.CharField(max_length=40)
     value = models.CharField(max_length=40)
+
+post_visitor_request_save = ModelSignal(providing_args=['instance', 'raw', 'created', 'using', 'update_fields'], use_caching=True)

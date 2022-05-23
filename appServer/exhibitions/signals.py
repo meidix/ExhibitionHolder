@@ -7,7 +7,7 @@ from django.utils.html import strip_tags
 
 from ippanel import Client
 
-from .models import Visitor
+from .models import Visitor, post_visitor_request_save
 
 @receiver(post_save, sender=Visitor)
 def send_greeting_test_message(sender, instance, created, *args, **kwargs):
@@ -23,7 +23,7 @@ def send_greeting_test_message(sender, instance, created, *args, **kwargs):
         client.send(settings.HOST_PHONE_NUMBER, [instance.cellphone_number], message)
         print("message sent")
 
-@receiver(post_save, sender=Visitor)
+@receiver(post_visitor_request_save, sender=Visitor)
 def send_visitor_data(sender, instance, created, *args, **kwargs):
     if created:
         context = {

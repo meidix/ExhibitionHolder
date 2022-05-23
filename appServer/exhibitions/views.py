@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
 
-from exhibitions.models import CoopRequest, Exhibition, Products, Visitor
+from exhibitions.models import CoopRequest, Exhibition, Products, Visitor, post_visitor_request_save
 from exhibitions.serilializers import CoopRequestSerializer, ExhibitionSerializer, ProductsSerializer, VisitorSerailizer
 
 
@@ -77,6 +77,7 @@ class VisitorViewSet(ModelViewSet):
             # html_message = render_to_string('exhibitions/report.html', context=context)
             # plain_message = strip_tags(html_message)
             # send_mail(subject, plain_message, settings.EMAIL_HOST_USER, [settings.EMAIL_GUEST_USER], fail_silently=True, html_message=html_message)
+            post_visitor_request_save.send(sender=Visitor, instance=instance, created=True)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
