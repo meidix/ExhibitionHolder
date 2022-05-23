@@ -9,30 +9,30 @@ from ippanel import Client
 
 from .models import Visitor
 
-@receiver(post_save, sender=Visitor)
-def send_greeting_test_message(sender, instance, created, *args, **kwargs):
-    if created:
-        client = Client(settings.IPPANEL_API_KEY)
-        message = '''
-        از حضور ارزشمند شما در غرفه شرکت فاپسکو سپاسگذاریم.
-        جهت اطلاعات بیشتر لطفا با ما در تماس باشید
-        09129346190
-        09133081431
-        03133932014-18
-        '''
-        client.send(settings.HOST_PHONE_NUMBER, [instance.cellphone_number], message)
-        print("message sent")
-
 # @receiver(post_save, sender=Visitor)
-# def send_visitor_data(sender, instance, created, *args, **kwargs):
+# def send_greeting_test_message(sender, instance, created, *args, **kwargs):
 #     if created:
-#         context = {
-#             "visitor": instance,
-#             'coops': instance.coop_request.all(),
-#             'products': instance.products_request.all(),
-#         }
-#         subject = f'بازدید کننده جدید در {instance.exhibition.title}'
-#         html_message = render_to_string('exhibitions/report.html', context=context)
-#         plain_message = strip_tags(html_message)
-#         to = 'mahdihossieni@gmail.com'
-#         send_mail(subject, plain_message, settings.EMAIL_HOST_USER, [to], fail_silently=True, html_message=html_message)
+#         client = Client(settings.IPPANEL_API_KEY)
+#         message = '''
+#         از حضور ارزشمند شما در غرفه شرکت فاپسکو سپاسگذاریم.
+#         جهت اطلاعات بیشتر لطفا با ما در تماس باشید
+#         09129346190
+#         09133081431
+#         03133932014-18
+#         '''
+#         client.send(settings.HOST_PHONE_NUMBER, [instance.cellphone_number], message)
+#         print("message sent")
+
+@receiver(post_save, sender=Visitor)
+def send_visitor_data(sender, instance, created, *args, **kwargs):
+    if created:
+        context = {
+            "visitor": instance,
+            'coops': instance.coop_request.all(),
+            'products': instance.products_request.all(),
+        }
+        subject = f'بازدید کننده جدید در {instance.exhibition.title}'
+        html_message = render_to_string('exhibitions/report.html', context=context)
+        plain_message = strip_tags(html_message)
+        to = 'mahdihossieni@gmail.com'
+        send_mail(subject, plain_message, settings.EMAIL_HOST_USER, [to], fail_silently=True, html_message=html_message)
