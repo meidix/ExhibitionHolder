@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 IPPANEL_API_KEY = os.environ.get('IPPANEL_API_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
