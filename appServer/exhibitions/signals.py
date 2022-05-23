@@ -16,11 +16,15 @@ def send_greeting_test_message(sender, instance, created, *args, **kwargs):
         message = '''
         از حضور ارزشمند شما در غرفه شرکت فاپسکو سپاسگذاریم.
         جهت اطلاعات بیشتر لطفا با ما در تماس باشید
-        09129346190
+        09129682834
         09133081431
         03133932014-18
         '''
-        client.send(settings.HOST_PHONE_NUMBER, [instance.cellphone_number], message)
+        values = {
+            "name": f'{instance.first_name} {instance.last_name}'
+        }
+        # client.send(settings.HOST_PHONE_NUMBER, [instance.cellphone_number], message)
+        client.send_pattern("6fde6dhr7wenk3e", settings.HOST_PHONE_NUMBER, [instance.cellphone_number], values)
         print("message sent")
 
 @receiver(post_visitor_request_save, sender=Visitor)
