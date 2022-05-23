@@ -68,15 +68,15 @@ class VisitorViewSet(ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             instance = self.add_m2m_fields(serializer.instance, coops, products)
-            context = {
-                "visitor": instance,
-                'coops': instance.coop_request.all(),
-                'products': instance.products_request.all(),
-            }
-            subject = f'بازدید کننده جدید در {instance.exhibition.title}'
-            html_message = render_to_string('exhibitions/report.html', context=context)
-            plain_message = strip_tags(html_message)
-            send_mail(subject, plain_message, settings.EMAIL_HOST_USER, [settings.EMAIL_GUEST_USER], fail_silently=True, html_message=html_message)
+            # context = {
+            #     "visitor": instance,
+            #     'coops': instance.coop_request.all(),
+            #     'products': instance.products_request.all(),
+            # }
+            # subject = f'بازدید کننده جدید در {instance.exhibition.title}'
+            # html_message = render_to_string('exhibitions/report.html', context=context)
+            # plain_message = strip_tags(html_message)
+            # send_mail(subject, plain_message, settings.EMAIL_HOST_USER, [settings.EMAIL_GUEST_USER], fail_silently=True, html_message=html_message)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)

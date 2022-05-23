@@ -9,19 +9,19 @@ from ippanel import Client
 
 from .models import Visitor
 
-# @receiver(post_save, sender=Visitor)
-# def send_greeting_test_message(sender, instance, created, *args, **kwargs):
-#     if created:
-#         client = Client(settings.IPPANEL_API_KEY)
-#         message = '''
-#         از حضور ارزشمند شما در غرفه شرکت فاپسکو سپاسگذاریم.
-#         جهت اطلاعات بیشتر لطفا با ما در تماس باشید
-#         09129346190
-#         09133081431
-#         03133932014-18
-#         '''
-#         client.send(settings.HOST_PHONE_NUMBER, [instance.cellphone_number], message)
-#         print("message sent")
+@receiver(post_save, sender=Visitor)
+def send_greeting_test_message(sender, instance, created, *args, **kwargs):
+    if created:
+        client = Client(settings.IPPANEL_API_KEY)
+        message = '''
+        از حضور ارزشمند شما در غرفه شرکت فاپسکو سپاسگذاریم.
+        جهت اطلاعات بیشتر لطفا با ما در تماس باشید
+        09129346190
+        09133081431
+        03133932014-18
+        '''
+        client.send(settings.HOST_PHONE_NUMBER, [instance.cellphone_number], message)
+        print("message sent")
 
 @receiver(post_save, sender=Visitor)
 def send_visitor_data(sender, instance, created, *args, **kwargs):
