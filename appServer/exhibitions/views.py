@@ -61,8 +61,8 @@ class VisitorViewSet(ModelViewSet):
             return Response({}, status=status.HTTP_404_NOT_FOUND)
 
         data = request.data.copy()
-        coops = data.pop('coop_request', None)
-        products = data.pop('product_request', None)
+        coops = data.pop('coop_request', [])
+        products = data.pop('product_request', [])
         data['exhibition'] = exhibition.pk
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
