@@ -1,7 +1,7 @@
 .ModalPane {
   width: 100%;
   height: 912px;
-  padding: 50px;
+  /* padding: 50px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,7 +20,7 @@
 
 .ModalPane .Modal {
   margin: 31px 0 0;
-  padding: 55px 88.5px 75px 106px;
+  padding: 22%;
   border-radius: 40px;
   box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.16);
   background-color: #fff;
